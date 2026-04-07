@@ -15,10 +15,19 @@ class RegisterController extends Controller
         return view('frontend.register', compact('wards'));
     }
 
-    public function status()
-    {
-        return view('frontend.status');
+    public function status(Request $request)
+{
+    
+    $applicationId = $request->application_id ?? $request->name;
+
+    $register = null;
+
+    if ($applicationId) {
+        $register = RegisterForm::where('application_id', $applicationId)->first();
     }
+
+    return view('frontend.status', compact('register', 'applicationId'));
+}
 
     public function store(Request $request)
     {
@@ -68,7 +77,8 @@ class RegisterController extends Controller
         return view('frontend.payment', compact('order', 'register', 'amount'));
     }
 
-   
+
+    
 public function approve(Request $request, $id)
 {
     $request->validate([
@@ -82,13 +92,7 @@ public function approve(Request $request, $id)
         return back()->with('error', 'Already Approved');
     }
 
-    // ✅ Step 1: Generate Application ID
-    $applicationId = 'REG-' . date('Y') . '-' . str_pad($register->id, 5, '0', STR_PAD_LEFT);
-
-    // ✅ Step 2: Save Application ID first
-    $register->update([
-        'application_id' => $applicationId
-    ]);
+    $applicationId = $register->application_id;
 
     // ✅ Step 3: Generate QR Code
     $qrPath = 'qrcodes/' . $applicationId . '.png';

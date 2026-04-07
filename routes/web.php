@@ -22,7 +22,8 @@ Route::get('/vehicleform', [VehicleRegisterController::class, 'index'])->name('v
 Route::post('/vehicle/store', [VehicleRegisterController::class, 'store'])->name('vehicle.store');
 Route::get('/vehicle/view/{id}', [VehicleController::class, 'show'])->name('vehicle.view');
 
-Route::get('/status', [RegisterController::class, 'status'])->name('status');
+
+Route::get('/status', [RegisterController::class, 'status'])->name('status.page');
 
  Route::post('/register/store',[RegisterController::class,'store'])->name('register.store');
 

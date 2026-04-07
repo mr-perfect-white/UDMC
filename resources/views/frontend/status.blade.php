@@ -52,6 +52,18 @@ body {
 .form-text {
     font-size: 12px;
 }
+
+table {
+    caption-side: bottom;
+    border-collapse: collapse;
+    width: 100%;
+    color: #fff;
+   border-color: #1f4e79;
+}
+h4 {
+    text-align: center;
+    color: #fff !important;
+}
 </style>
 
 @section('content')
@@ -64,7 +76,7 @@ body {
                         Status Page
                     </h4>
 
-                    <form action="" method="get">
+                    <form action="{{ route('status.page') }}" method="GET">
                         <div class="mb-3">
                             <label class="form-label">Enter Register ID <span class="text-danger">*</span></label>
                             <div class="input-group">
@@ -96,6 +108,94 @@ body {
 
                         
                     </form>
+
+                    @if($applicationId)
+    <h4>Application ID: {{ $applicationId }}</h4>
+@endif
+
+@if($register)
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Name</th>
+            <td>{{ $register->name }}</td>
+        </tr>
+
+        <tr>
+            <th>Mobile</th>
+            <td>{{ $register->mobile }}</td>
+        </tr>
+
+        <tr>
+            <th>Email</th>
+            <td>{{ $register->email }}</td>
+        </tr>
+
+        <tr>
+            <th>Property Type</th>
+            <td>{{ $register->property_type }}</td>
+        </tr>
+
+        <tr>
+            <th>Site Address</th>
+            <td>{{ $register->site_address }}</td>
+        </tr>
+
+        <tr>
+            <th>Ward</th>
+            <td>{{ $register->ward_id }}</td>
+        </tr>
+
+        <tr>
+            <th>Built Up Area</th>
+            <td>{{ $register->built_up_area }}</td>
+        </tr>
+
+        <tr>
+            <th>Estimated Waste</th>
+            <td>{{ $register->estimated_waste }}</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>
+                @if($register->status == 'pending')
+                    <span style="color: orange;">Pending</span>
+                @elseif($register->status == 'approved')
+                    <span style="color: green;">Approved</span>
+                @else
+                    {{ $register->status }}
+                @endif
+            </td>
+        </tr>
+
+        {{-- ✅ Show QR if available --}}
+        @if($register->qr_code)
+        <tr>
+            <th>QR Code</th>
+            <td>
+                <img src="{{ asset($register->qr_code) }}" width="150">
+            </td>
+        </tr>
+        @endif
+
+        {{-- ✅ Show PDF if available --}}
+        @if($register->pdf_file)
+        <tr>
+            <th>Download PDF</th>
+            <td>
+                <a href="{{ asset($register->pdf_file) }}" target="_blank">Download</a>
+            </td>
+        </tr>
+        @endif
+
+    </table>
+
+@elseif($applicationId)
+
+    <p style="color:#fffa73; text-align:center;">Pending for this Application ID</p>
+
+@endif
                 </div>
 
                 
