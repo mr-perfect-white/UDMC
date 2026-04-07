@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class RegisterForm extends Model
+class RegisterForm extends Authenticatable
 {
     protected $table = 'register_forms';
 
@@ -12,6 +13,7 @@ class RegisterForm extends Model
         'name',
         'mobile',
         'email',
+        'password', // ✅ ADD THIS
         'property_type',
         'demolition_type',
         'site_address',
@@ -30,6 +32,8 @@ class RegisterForm extends Model
     {
         return $this->belongsTo(Ward::class);
     }
+
+   
 }
 
  

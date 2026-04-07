@@ -19,6 +19,29 @@ class VehicleController extends Controller
 
     return view('admin.master.vehicle.view', compact('vehicle'));
 }
+public function availableTickets()
+{
+    $tickets = Ticket::where('status', 'pending')->get();
 
+    return view('vehiclepwa.tickets', compact('tickets'));
+}
+
+public function acceptTicket($id)
+{
+    $vehicleId = session('vehicle_user_id');
+
+    $ticket = Ticket::findOrFail($id);
+
+    if ($ticket->status != 'pending') {
+        return back()->with('error', 'Already taken');
+    }
+
+    $ticket->update([
+        'status' => 'processing',
+        'vehicle_id' => $vehicleId
+    ]);
+
+    return back()->with('success', 'Ticket Accepted');
+}
 
 }

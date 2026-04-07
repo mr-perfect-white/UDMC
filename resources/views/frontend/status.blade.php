@@ -76,7 +76,7 @@ h4 {
                         Status Page
                     </h4>
 
-                    <form action="{{ route('status.page') }}" method="GET">
+                    <form action="{{ route('status') }}" method="GET">
                         <div class="mb-3">
                             <label class="form-label">Enter Register ID <span class="text-danger">*</span></label>
                             <div class="input-group">

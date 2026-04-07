@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RegisterForm;
 use App\Models\Ward;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -44,9 +46,12 @@ class RegisterController extends Controller
             'estimated_waste' => 'required',
         ]);
 
+        
+
         // ✅ Step 1: Save as pending
         $register = RegisterForm::create([
             ...$request->all(),
+             'password' => Hash::make($request->mobile), // simple password
             'status' => 'pending'
         ]);
 
@@ -117,4 +122,82 @@ public function approve(Request $request, $id)
 
     return back()->with('success', 'Application Approved Successfully. ID: ' . $applicationId);
 }
+
+
+public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required',
+        'password' => 'required'
+    ]);
+
+    // Email OR Mobile login
+    $field = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'mobile';
+
+    if (Auth::attempt([$field => $request->email, 'password' => $request->password])) {
+        return redirect()->route('registeruser.dashboard');
+    }
+
+    return back()->with('error', 'Invalid login details');
+}
+
+
+public function logout()
+{
+    Auth::logout();
+    return redirect()->route('registeruser.login');
+}
+
+
+public function dashboard()
+{
+    $user = Auth::user();
+
+    // Get all registers of this user
+    $registers = RegisterForm::where('email', $user->email)->get();
+
+    return view('frontend.registeruserdashboard', compact('user', 'registers'));
+}
+public function ticket()
+{
+     $user = Auth::user();
+
+    // Get all registers of this user
+    $registers = RegisterForm::where('email', $user->email)->get();
+    return view('frontend.ticket', compact('user', 'registers'));
+}
+public function storeticket(Request $request)
+{
+    $request->validate([
+        'register_id' => 'required|exists:register_forms,id',
+        'quantity' => 'required|numeric|min:0.01',
+        'latitude' => 'required|numeric',
+        'longitude' => 'required|numeric',
+        'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+
+    // ✅ Get Register safely
+    $register = RegisterForm::findOrFail($request->register_id);
+
+    // ✅ Upload Photo
+    $photoPath = null;
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('tickets', 'public');
+    }
+
+    // ✅ Create Ticket
+    Ticket::create([
+        'register_id' => $register->id,
+        'application_id' => $register->application_id, // safe from DB
+        'quantity' => $request->quantity,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'photo' => $photoPath,
+        'status' => 'pending'
+    ]);
+
+    return back()->with('success', 'Ticket Created Successfully');
+}
+
+
 }

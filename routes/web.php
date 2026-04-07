@@ -23,7 +23,7 @@ Route::post('/vehicle/store', [VehicleRegisterController::class, 'store'])->name
 Route::get('/vehicle/view/{id}', [VehicleController::class, 'show'])->name('vehicle.view');
 
 
-Route::get('/status', [RegisterController::class, 'status'])->name('status.page');
+Route::get('/status', [RegisterController::class, 'status'])->name('status');
 
  Route::post('/register/store',[RegisterController::class,'store'])->name('register.store');
 
@@ -75,32 +75,64 @@ Route::post('/register/{id}/approve', [FormRegisterController::class, 'approve']
 // Logout
 Route::get('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
-
+use App\Http\Controllers\VehiclepwaController;
 
 // Vehicle Routes
 Route::prefix('vehicle')->name('vehicle.')->group(function () {
 
- 
     Route::get('/login', [VehicleAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [VehicleAuthController::class, 'login'])->name('login.post');
-
-    
-    
     Route::post('/logout', [VehicleAuthController::class, 'logout'])->name('logout');
 
-    
     Route::middleware(['vehicle.auth'])->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('vehiclepwa.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [VehiclepwaController::class, 'index'])
+            ->name('dashboard');
 
     });
 
 });
 
 
+
+
+
+
 use App\Http\Controllers\PaymentController;
 
 Route::get('/payment', [PaymentController::class, 'createOrder']);
 Route::post('/payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+
+
+
+Route::prefix('registeruser')->group(function () {
+
+    // Login Page
+    Route::get('/login', function () {
+        return view('frontend.registerlogin');
+    })->name('registeruser.login');
+
+    // Login Submit
+    Route::post('/login', [RegisterController::class, 'login'])->name('registeruser.login.submit');
+
+    // Logout
+    Route::get('/logout', [RegisterController::class, 'logout'])->name('registeruser.logout');
+
+});
+
+Route::prefix('registeruser')->middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [RegisterController::class, 'dashboard'])->name('registeruser.dashboard');
+    Route::get('/ticket', [RegisterController::class, 'ticket'])->name('registeruser.ticket');
+  Route::post('/storeticket', [RegisterController::class, 'storeticket'])
+    ->name('registeruser.storeticket');
+    Route::get('/ticket/{id}', [RegisterController::class, 'ticket'])
+    ->name('registeruser.ticket');
+
+});
+
+
+
+Route::get('/vehicle/tickets', [VehiclepwaController::class, 'availableTickets'])->name('vehicle.tickets');
+
+Route::post('/vehicle/ticket/{id}/accept', [VehiclepwaController::class, 'acceptTicket'])->name('vehicle.accept.ticket');

@@ -40,6 +40,9 @@ class VehicleAuthController extends Controller
         return back()->with('error', 'Invalid Mobile or Password');
     }
 
+
+     
+
     public function logout()
 {
     session()->flush();

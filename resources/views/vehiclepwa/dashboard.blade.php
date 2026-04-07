@@ -174,8 +174,131 @@
         <div class="cta-sub">Accept new debris pickup requests</div>
     </a>
 
+    @foreach($tickets as $ticket)
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6>{{ $ticket->application_id }}</h6>
+        <p>Quantity: {{ $ticket->quantity }}</p>
+
+        <form method="POST" action="{{ route('vehicle.accept.ticket', $ticket->id) }}">
+            @csrf
+            <button class="btn btn-primary btn-sm">Accept</button>
+        </form>
+    </div>
+</div>
+
+@endforeach
+
  
-        <div class="section-label">Active Tickets</div>
+        <div class="section-label">Vehicle Details</div>
+
+         <div style="background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,0.07);">
+           <div class="container-fluid">
+        <div class="">
+            <div class="card shadow">
+                <div class="card-body">
+                    @if($vehicle)
+                    
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Vehicle Number</th>
+                            <td>{{ $vehicle->vehicle_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Vehicle Type</th>
+                            <td>{{ $vehicle->vehicle_type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Capacity</th>
+                            <td>{{ $vehicle->capacity }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>RC Certificate</th>
+                            <td>
+                                @if ($vehicle->rc_document)
+                                    <a href="{{ asset('storage/' . $vehicle->rc_document) }}" target="_blank">View RC Certificate</a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Fitness Certificate</th>
+                            <td>
+                                @if ($vehicle->fitness_certificate)
+                                    <a href="{{ asset('storage/' . $vehicle->fitness_certificate) }}" target="_blank">View Fitness Certificate</a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                        
+                       
+                        
+                        <tr>
+                            <th>Owner Aadhaar Number</th>
+                            <td>{{ $vehicle->owner_aadhaar_number ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Owner Aadhaar Photo</th>
+                            <td>
+                                @if ($vehicle->owner_aadhaar_photo)
+                                    <a href="{{ asset('storage/' . $vehicle->owner_aadhaar_photo) }}" target="_blank">View Owner Aadhaar</a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Driver Name</th>
+                            <td>{{ $vehicle->driver_name ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Driver Mobile</th>
+                            <td>{{ $vehicle->driver_mobile ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Driver Address</th>
+                            <td>{{ $vehicle->driver_address ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Driver License Number</th>
+                            <td>{{ $vehicle->driver_license_number ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Driver License Photo</th>
+                            <td>
+                                @if ($vehicle->driver_license_photo)
+                                    <a href="{{ asset('storage/' . $vehicle->driver_license_photo) }}" target="_blank">View Driver License</a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Driver Aadhaar Number</th>
+                            <td>{{ $vehicle->driver_aadhaar_number ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Driver Aadhaar Photo</th>
+                            <td>
+                                @if ($vehicle->driver_aadhaar_photo)
+                                    <a href="{{ asset('storage/' . $vehicle->driver_aadhaar_photo) }}" target="_blank">View Driver Aadhaar</a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                       
+                    </table>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
 
         <div class="row g-3">
           
