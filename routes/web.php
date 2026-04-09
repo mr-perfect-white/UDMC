@@ -89,7 +89,20 @@ Route::prefix('vehicle')->name('vehicle.')->group(function () {
         Route::get('/dashboard', [VehiclepwaController::class, 'index'])
             ->name('dashboard');
 
+         Route::get('/pickup', [VehiclepwaController::class, 'pickup'])
+            ->name('pickup');
+        
+        Route::get('/dump', [VehiclepwaController::class, 'dump'])
+            ->name('dump');
+
+        Route::get('/history', [VehiclepwaController::class, 'history'])
+            ->name('history');
     });
+
+    Route::post('/accept-ticket', [VehiclepwaController::class, 'acceptTicket'])
+    ->name('vehicle.accept.ticket');
+    Route::post('vehicle/ticket/{id}/accept', [VehiclepwaController::class, 'acceptTicket'])
+    ->name('vehicle.accept.ticket');
 
 });
 
@@ -123,11 +136,15 @@ Route::prefix('registeruser')->group(function () {
 Route::prefix('registeruser')->middleware('auth')->group(function () {
 
     Route::get('/dashboard', [RegisterController::class, 'dashboard'])->name('registeruser.dashboard');
-    Route::get('/ticket', [RegisterController::class, 'ticket'])->name('registeruser.ticket');
+    
   Route::post('/storeticket', [RegisterController::class, 'storeticket'])
     ->name('registeruser.storeticket');
-    Route::get('/ticket/{id}', [RegisterController::class, 'ticket'])
-    ->name('registeruser.ticket');
+    Route::get('/ticket', [RegisterController::class, 'ticket'])->name('registeruser.ticket');
+Route::get('/ticket/{id}', [RegisterController::class, 'ticket'])->name('registeruser.ticket.view');
+
+ Route::get('/ticketlist', [RegisterController::class, 'ticketlist'])->name('registeruser.ticketlist');
+
+ 
 
 });
 

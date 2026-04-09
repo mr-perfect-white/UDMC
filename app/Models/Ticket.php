@@ -22,6 +22,7 @@ class Ticket extends Model
     {
         return $this->belongsTo(RegisterForm::class);
     }
+    
 
     public function vehicle()
     {

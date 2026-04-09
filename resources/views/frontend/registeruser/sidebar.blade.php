@@ -17,14 +17,20 @@
                         <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2"
                                 aria-hidden="true"> </i></div>
                     </li>
-<li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="{{route('registeruser.dashboard')}}">
+                    <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="{{route('registeruser.dashboard')}}">
                             <span><i class="bi bi-house-door-fill"></i></span>
                             <span>Dashboard</span></a>
                     </li>
                     <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="{{route('registeruser.ticket')}}">
                             <span><i class="bi bi-pencil-square"></i></span>
-                            <span>Request</span></a>
+                            <span>Create Request</span></a>
                     </li>
+                    <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="{{route('registeruser.ticketlist')}}">
+                            <span><i class="bi bi-ticket-perforated"></i></span>
+                            <span>Ticket List</span></a>
+                    </li>
+
+                    
                     <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="">
                             <span><i class="bi bi-ticket-perforated"></i></span>
                             <span>History</span></a>

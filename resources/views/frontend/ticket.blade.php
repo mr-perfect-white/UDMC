@@ -155,7 +155,7 @@
     @csrf
 
    
-
+<input type="hidden" name="register_id" value="{{ $user->id }}">
     <!-- Application ID -->
     <div class="mb-3">
         <label>Application ID</label>

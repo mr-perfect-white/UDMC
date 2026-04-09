@@ -124,6 +124,24 @@
     .cta-card .cta-icon { font-size: 32px; margin-bottom: 8px; }
     .cta-card .cta-title { font-size: 16px; font-weight: 700; }
     .cta-card .cta-sub   { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+    .ticket-card {
+    border-radius: 12px;
+    transition: all 0.25s ease;
+}
+
+.ticket-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.btn-success {
+    border-radius: 8px;
+    font-weight: 600;
+}
 </style>
 @endsection
 
@@ -173,24 +191,62 @@
         <div class="cta-title">Browse Available Tickets</div>
         <div class="cta-sub">Accept new debris pickup requests</div>
     </a>
+   @if($tickets->count())
+<div class="row">
+@foreach($tickets as $ticket)
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card ticket-card h-100 border-0 shadow-sm">
 
-    @foreach($tickets as $ticket)
+            <!-- Header -->
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-primary">
+                    <i class="bi bi-hash"></i> {{ $ticket->application_id }}
+                </span>
+                <span class="badge bg-warning text-dark">
+                    {{ ucfirst($ticket->status) }}
+                </span>
+            </div>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <h6>{{ $ticket->application_id }}</h6>
-        <p>Quantity: {{ $ticket->quantity }}</p>
+            <!-- Body -->
+            <div class="card-body">
+                <div class="mb-2">
+                    <small class="text-muted">Quantity</small>
+                    <div class="fw-semibold">{{ $ticket->quantity }}</div>
+                </div>
 
-        <form method="POST" action="{{ route('vehicle.accept.ticket', $ticket->id) }}">
-            @csrf
-            <button class="btn btn-primary btn-sm">Accept</button>
-        </form>
+                <div class="mb-2">
+                    <small class="text-muted">Location</small>
+                    <div>
+                        <i class="bi bi-geo-alt text-danger"></i>
+                        <span class="small">
+                            {{ $ticket->latitude }}, {{ $ticket->longitude }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer bg-white border-0">
+                <form method="POST" action="{{ route('vehicle.accept.ticket', $ticket->id) }}">
+                    @csrf
+                    <button class="btn btn-success w-100">
+                        <i class="bi bi-check-circle"></i> Accept Request
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
-</div>
-
 @endforeach
+</div>
+@else
+    <div class="text-center mt-5">
+        <i class="bi bi-inbox display-5 text-muted"></i>
+        <p class="mt-2 text-muted">No pending tickets available</p>
+    </div>
+@endif
+    
 
- 
         <div class="section-label">Vehicle Details</div>
 
          <div style="background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,0.07);">

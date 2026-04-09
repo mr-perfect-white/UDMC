@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RegisterForm;
 use App\Models\Ward;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -166,8 +167,24 @@ public function ticket()
     $registers = RegisterForm::where('email', $user->email)->get();
     return view('frontend.ticket', compact('user', 'registers'));
 }
+
+public function ticketlist()
+{
+    $user = Auth::user();
+
+    // Get only this user's registers
+    $registerIds = RegisterForm::where('email', $user->email)
+                    ->pluck('id');
+
+    // Get tickets only for this user
+    $tickets = Ticket::whereIn('register_id', $registerIds)->get();
+
+    return view('frontend.ticketlist', compact('tickets'));
+}
+
 public function storeticket(Request $request)
 {
+    
     $request->validate([
         'register_id' => 'required|exists:register_forms,id',
         'quantity' => 'required|numeric|min:0.01',
@@ -187,7 +204,7 @@ public function storeticket(Request $request)
 
     // ✅ Create Ticket
     Ticket::create([
-        'register_id' => $register->id,
+        'register_id' => $request->register_id,
         'application_id' => $register->application_id, // safe from DB
         'quantity' => $request->quantity,
         'latitude' => $request->latitude,

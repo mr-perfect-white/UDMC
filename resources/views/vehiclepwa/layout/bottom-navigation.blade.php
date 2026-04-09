@@ -1,7 +1,7 @@
 <div id="footer-bar" class="footer-bar-5">
 
     <!-- Pickup -->
-    <a href="">
+    <a href="{{route('vehicle.pickup')}}">
         <i data-feather="package"
            data-feather-line="1"
            data-feather-size="21"
@@ -11,7 +11,7 @@
     </a>
 
     <!-- Home -->
-    <a href="" class="active-nav">
+    <a href="{{route('vehicle.dashboard')}}" class="active-nav">
         <i data-feather="home"
            data-feather-line="1"
            data-feather-size="21"
@@ -21,7 +21,7 @@
     </a>
 
     <!-- Dump -->
-    <a href="">
+    <a href="{{route('vehicle.dump')}}">
         <i data-feather="trash-2"
            data-feather-line="1"
            data-feather-size="21"
@@ -31,7 +31,7 @@
     </a>
 
     <!-- History -->
-    <a href="">
+    <a href="{{route('vehicle.history')}}">
         <i data-feather="clock"
            data-feather-line="1"
            data-feather-size="21"
